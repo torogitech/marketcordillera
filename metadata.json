@@ -1,0 +1,7 @@
+{
+  "name": " MarketCordillera",
+  "description": "A modern, aesthetic Store retail featuring real-time inventory tracking, store management, and restaurant logistics in the Cordillera region.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
