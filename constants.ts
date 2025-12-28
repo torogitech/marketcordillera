@@ -412,12 +412,12 @@ export const ACCOMMODATIONS: Accommodation[] = [
 ];
 
 export const RIDERS: Rider[] = [
-  { id: 'ri1', name: 'James Baguio', phone: '+63 912 345 6789', email: 'james.b@marketcordi.ph', status: 'Available', vehicle: 'Motorcycle', deliveries: 1240, rating: 4.9, avatar: 'https://picsum.photos/seed/ri1/150' },
-  { id: 'ri2', name: 'Maria Santos', phone: '+63 923 456 7890', email: 'maria.s@marketcordi.ph', status: 'On Delivery', vehicle: 'Motorcycle', deliveries: 856, rating: 4.7, avatar: 'https://picsum.photos/seed/ri2/150' },
-  { id: 'ri3', name: 'Jun Luna', phone: '+63 934 567 8901', email: 'jun.l@marketcordi.ph', status: 'Break', vehicle: 'Bicycle', deliveries: 432, rating: 4.8, avatar: 'https://picsum.photos/seed/ri3/150' },
-  { id: 'ri4', name: 'Elena Cruz', phone: '+63 945 678 9012', email: 'elena.c@marketcordi.ph', status: 'Available', vehicle: 'Car', deliveries: 210, rating: 4.5, avatar: 'https://picsum.photos/seed/ri4/150' },
-  { id: 'ri5', name: 'Rico Blanco', phone: '+63 956 789 0123', email: 'rico.b@marketcordi.ph', status: 'Offline', vehicle: 'Motorcycle', deliveries: 1540, rating: 4.9, avatar: 'https://picsum.photos/seed/ri5/150' },
-  { id: 'ri6', name: 'Sarah G.', phone: '+63 967 890 1234', email: 'sarah.g@marketcordi.ph', status: 'On Delivery', vehicle: 'Bicycle', deliveries: 95, rating: 4.6, avatar: 'https://picsum.photos/seed/ri6/150' },
+  { id: 'ri1', name: 'James Baguio', phone: '+63 912 345 6789', email: 'james.b@marketcordi.ph', status: 'Available', vehicle: 'Motorcycle', deliveries: 1240, rating: 4.9, avatar: 'https://picsum.photos/seed/ri1/150', avgDeliveryTime: 22, successRate: 99.2, cancellationRate: 0.5 },
+  { id: 'ri2', name: 'Maria Santos', phone: '+63 923 456 7890', email: 'maria.s@marketcordi.ph', status: 'On Delivery', vehicle: 'Motorcycle', deliveries: 856, rating: 4.7, avatar: 'https://picsum.photos/seed/ri2/150', avgDeliveryTime: 28, successRate: 97.5, cancellationRate: 1.2 },
+  { id: 'ri3', name: 'Jun Luna', phone: '+63 934 567 8901', email: 'jun.l@marketcordi.ph', status: 'Break', vehicle: 'Bicycle', deliveries: 432, rating: 4.8, avatar: 'https://picsum.photos/seed/ri3/150', avgDeliveryTime: 35, successRate: 98.8, cancellationRate: 0.2 },
+  { id: 'ri4', name: 'Elena Cruz', phone: '+63 945 678 9012', email: 'elena.c@marketcordi.ph', status: 'Available', vehicle: 'Car', deliveries: 210, rating: 4.5, avatar: 'https://picsum.photos/seed/ri4/150', avgDeliveryTime: 18, successRate: 94.0, cancellationRate: 3.5 },
+  { id: 'ri5', name: 'Rico Blanco', phone: '+63 956 789 0123', email: 'rico.b@marketcordi.ph', status: 'Offline', vehicle: 'Motorcycle', deliveries: 1540, rating: 4.9, avatar: 'https://picsum.photos/seed/ri5/150', avgDeliveryTime: 21, successRate: 99.8, cancellationRate: 0.1 },
+  { id: 'ri6', name: 'Sarah G.', phone: '+63 967 890 1234', email: 'sarah.g@marketcordi.ph', status: 'On Delivery', vehicle: 'Bicycle', deliveries: 95, rating: 4.6, avatar: 'https://picsum.photos/seed/ri6/150', avgDeliveryTime: 42, successRate: 96.2, cancellationRate: 1.0 },
 ];
 
 export const USERS: User[] = [

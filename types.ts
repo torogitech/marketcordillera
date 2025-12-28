@@ -134,10 +134,15 @@ export interface Rider {
   phone: string;
   email: string;
   status: RiderStatus;
+  availabilityDetail?: string;
   vehicle: VehicleType;
   deliveries: number;
   rating: number;
   avatar: string;
+  // Performance Metrics
+  avgDeliveryTime: number; // in minutes
+  successRate: number; // percentage
+  cancellationRate: number; // percentage
 }
 
 export interface AuditLogEntry {

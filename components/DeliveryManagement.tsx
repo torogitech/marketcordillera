@@ -6,7 +6,8 @@ import {
   Search, Plus, Bike, Truck, Car, Star, Phone, Mail, 
   Filter, CheckCircle2, XCircle, Clock, Trash2, Edit, 
   X, UserPlus, Save, Activity, ArrowUpRight, ArrowDownRight,
-  TrendingUp, Users, MapPin, Shield
+  TrendingUp, Users, MapPin, Shield, Info, Timer, Award,
+  Target, AlertCircle
 } from 'lucide-react';
 
 const DeliveryManagement: React.FC = () => {
@@ -24,9 +25,13 @@ const DeliveryManagement: React.FC = () => {
     email: '',
     phone: '',
     status: 'Available',
+    availabilityDetail: '',
     vehicle: 'Motorcycle',
     rating: 5.0,
-    deliveries: 0
+    deliveries: 0,
+    avgDeliveryTime: 25,
+    successRate: 100,
+    cancellationRate: 0
   });
 
   const filteredRiders = riders.filter(rider => {
@@ -42,7 +47,19 @@ const DeliveryManagement: React.FC = () => {
       setFormData(rider);
     } else {
       setEditingRider(null);
-      setFormData({ name: '', email: '', phone: '', status: 'Available', vehicle: 'Motorcycle', rating: 5.0, deliveries: 0 });
+      setFormData({ 
+        name: '', 
+        email: '', 
+        phone: '', 
+        status: 'Available', 
+        availabilityDetail: '', 
+        vehicle: 'Motorcycle', 
+        rating: 5.0, 
+        deliveries: 0,
+        avgDeliveryTime: 25,
+        successRate: 100,
+        cancellationRate: 0
+      });
     }
     setIsModalOpen(true);
   };
@@ -58,9 +75,13 @@ const DeliveryManagement: React.FC = () => {
         email: formData.email || '',
         phone: formData.phone || '',
         status: formData.status as RiderStatus,
+        availabilityDetail: formData.availabilityDetail,
         vehicle: formData.vehicle as VehicleType,
         rating: formData.rating || 5.0,
         deliveries: formData.deliveries || 0,
+        avgDeliveryTime: formData.avgDeliveryTime || 25,
+        successRate: formData.successRate || 100,
+        cancellationRate: formData.cancellationRate || 0,
         avatar: `https://picsum.photos/seed/${id}/150`
       };
       setRiders([newRider, ...riders]);
@@ -196,8 +217,8 @@ const DeliveryManagement: React.FC = () => {
               <tr>
                 <th className="px-6 py-5">Rider Details</th>
                 <th className="px-6 py-5">Vehicle</th>
-                <th className="px-6 py-5">Status</th>
-                <th className="px-6 py-5">Performance</th>
+                <th className="px-6 py-5">Status & Availability</th>
+                <th className="px-6 py-5">Performance Metrics</th>
                 <th className="px-6 py-5 text-right">Actions</th>
               </tr>
             </thead>
@@ -225,19 +246,47 @@ const DeliveryManagement: React.FC = () => {
                      </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${getStatusStyle(rider.status)}`}>
-                       {rider.status}
-                    </span>
+                    <div className="flex flex-col gap-1.5">
+                      <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border self-start ${getStatusStyle(rider.status)}`}>
+                         {rider.status}
+                      </span>
+                      {rider.availabilityDetail && (
+                        <div className="flex items-center gap-1.5 text-xs text-gray-500 font-medium italic">
+                          <Clock size={12} className="text-orange-400" />
+                          <span>{rider.availabilityDetail}</span>
+                        </div>
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4">
-                     <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1.5">
-                           <Star size={12} className="text-yellow-500 fill-yellow-500" />
-                           <span className="text-sm font-bold text-gray-800">{rider.rating}</span>
+                     <div className="flex items-center gap-6">
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-1.5">
+                              <Star size={12} className="text-yellow-500 fill-yellow-500" />
+                              <span className="text-sm font-bold text-gray-800">{rider.rating}</span>
+                           </div>
+                           <p className="text-[9px] font-black text-gray-400 uppercase tracking-tighter">
+                              Rating
+                           </p>
                         </div>
-                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">
-                           {rider.deliveries.toLocaleString()} Deliveries
-                        </p>
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-1.5">
+                              <Timer size={12} className="text-blue-500" />
+                              <span className="text-sm font-bold text-gray-800">{rider.avgDeliveryTime}m</span>
+                           </div>
+                           <p className="text-[9px] font-black text-gray-400 uppercase tracking-tighter">
+                              Avg Time
+                           </p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                           <div className="flex items-center gap-1.5">
+                              <Target size={12} className="text-green-500" />
+                              <span className="text-sm font-bold text-gray-800">{rider.successRate}%</span>
+                           </div>
+                           <p className="text-[9px] font-black text-gray-400 uppercase tracking-tighter">
+                              Success
+                           </p>
+                        </div>
                      </div>
                   </td>
                   <td className="px-6 py-4">
@@ -276,18 +325,18 @@ const DeliveryManagement: React.FC = () => {
         </div>
       </div>
 
-      {/* Onboarding Modal */}
+      {/* Onboarding / Profile Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]">
-          <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden transform transition-all scale-100 flex flex-col max-h-[90vh]">
+          <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden transform transition-all scale-100 flex flex-col max-h-[95vh]">
             <div className="bg-gray-900 p-8 flex justify-between items-center text-white">
                <div className="flex items-center gap-4">
                   <div className="bg-orange-500 p-3 rounded-2xl text-white shadow-lg shadow-orange-500/20">
-                     <Bike size={24} />
+                     {editingRider ? <Award size={24} /> : <UserPlus size={24} />}
                   </div>
                   <div>
-                     <h3 className="font-bold text-xl">{editingRider ? 'Update Rider' : 'Onboard New Rider'}</h3>
-                     <p className="text-xs text-gray-400 mt-0.5">Manage delivery personnel details</p>
+                     <h3 className="font-bold text-xl">{editingRider ? 'Rider Profile' : 'Onboard New Rider'}</h3>
+                     <p className="text-xs text-gray-400 mt-0.5">Fleet ID: {editingRider?.id || 'Pending Generation'}</p>
                   </div>
                </div>
                <button onClick={() => setIsModalOpen(false)} className="bg-white/10 p-2.5 rounded-full hover:bg-white/20 transition-all">
@@ -295,71 +344,149 @@ const DeliveryManagement: React.FC = () => {
                </button>
             </div>
             
-            <div className="p-8 overflow-y-auto space-y-6">
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div className="md:col-span-2 space-y-2">
-                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-1">Rider Full Name</label>
-                     <input 
-                        type="text" 
-                        value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 transition-all font-medium text-gray-800"
-                        placeholder="e.g. John Dela Cruz"
-                     />
-                  </div>
+            <div className="p-8 overflow-y-auto">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Basic Information Section */}
+                  <div className="space-y-6">
+                     <h4 className="text-[11px] font-black text-orange-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                        <Users size={14} /> Basic Information
+                     </h4>
+                     
+                     <div className="space-y-4">
+                        <div className="space-y-2">
+                           <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block px-1">Rider Full Name</label>
+                           <input 
+                              type="text" 
+                              value={formData.name}
+                              onChange={(e) => setFormData({...formData, name: e.target.value})}
+                              className="w-full px-5 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 transition-all font-medium text-gray-800"
+                              placeholder="e.g. John Dela Cruz"
+                           />
+                        </div>
 
-                  <div className="space-y-2">
-                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-1">Email Address</label>
-                     <div className="relative">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
-                        <input 
-                           type="email" 
-                           value={formData.email}
-                           onChange={(e) => setFormData({...formData, email: e.target.value})}
-                           className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 transition-all font-medium text-gray-800"
-                           placeholder="john@marketcordi.ph"
-                        />
+                        <div className="space-y-2">
+                           <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block px-1">Email Address</label>
+                           <div className="relative">
+                              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
+                              <input 
+                                 type="email" 
+                                 value={formData.email}
+                                 onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                 className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 transition-all font-medium text-gray-800"
+                                 placeholder="john@marketcordi.ph"
+                              />
+                           </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                           <div className="space-y-2">
+                              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block px-1">Phone</label>
+                              <input 
+                                 type="tel" 
+                                 value={formData.phone}
+                                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                                 className="w-full px-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 transition-all font-medium text-gray-800"
+                                 placeholder="+63"
+                              />
+                           </div>
+                           <div className="space-y-2">
+                              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block px-1">Vehicle</label>
+                              <select 
+                                 value={formData.vehicle}
+                                 onChange={(e) => setFormData({...formData, vehicle: e.target.value as any})}
+                                 className="w-full px-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 transition-all font-medium text-gray-800 cursor-pointer appearance-none"
+                              >
+                                 <option value="Motorcycle">Motorcycle</option>
+                                 <option value="Bicycle">Bicycle</option>
+                                 <option value="Car">Car</option>
+                              </select>
+                           </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                           <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block px-1">Status & Details</label>
+                           <div className="flex gap-2">
+                              <select 
+                                 value={formData.status}
+                                 onChange={(e) => setFormData({...formData, status: e.target.value as any})}
+                                 className="w-1/3 px-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 transition-all font-medium text-gray-800 cursor-pointer appearance-none"
+                              >
+                                 <option value="Available">Available</option>
+                                 <option value="On Delivery">On Delivery</option>
+                                 <option value="Offline">Offline</option>
+                                 <option value="Break">Break</option>
+                              </select>
+                              <input 
+                                 type="text"
+                                 value={formData.availabilityDetail}
+                                 onChange={(e) => setFormData({...formData, availabilityDetail: e.target.value})}
+                                 placeholder="e.g. Back at 5 PM"
+                                 className="flex-1 px-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 transition-all font-medium text-gray-800"
+                              />
+                           </div>
+                        </div>
                      </div>
                   </div>
 
-                  <div className="space-y-2">
-                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-1">Phone Number</label>
-                     <div className="relative">
-                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
-                        <input 
-                           type="tel" 
-                           value={formData.phone}
-                           onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                           className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 transition-all font-medium text-gray-800"
-                           placeholder="+63 900 000 0000"
-                        />
+                  {/* Performance Metrics Section */}
+                  <div className="space-y-6">
+                     <h4 className="text-[11px] font-black text-orange-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                        <TrendingUp size={14} /> Performance Metrics
+                     </h4>
+                     
+                     <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-orange-50/50 p-5 rounded-[2rem] border border-orange-100/50">
+                           <div className="flex items-center gap-2 text-orange-600 mb-2">
+                              <Star size={18} className="fill-orange-500" />
+                              <span className="text-[10px] font-black uppercase tracking-widest">Rating</span>
+                           </div>
+                           <p className="text-2xl font-black text-gray-900">{formData.rating}</p>
+                           <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase">Customer Satisfaction</p>
+                        </div>
+                        
+                        <div className="bg-blue-50/50 p-5 rounded-[2rem] border border-blue-100/50">
+                           <div className="flex items-center gap-2 text-blue-600 mb-2">
+                              <Timer size={18} />
+                              <span className="text-[10px] font-black uppercase tracking-widest">Efficiency</span>
+                           </div>
+                           <p className="text-2xl font-black text-gray-900">{formData.avgDeliveryTime}m</p>
+                           <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase">Avg Delivery Time</p>
+                        </div>
+                        
+                        <div className="bg-green-50/50 p-5 rounded-[2rem] border border-green-100/50">
+                           <div className="flex items-center gap-2 text-green-600 mb-2">
+                              <CheckCircle2 size={18} />
+                              <span className="text-[10px] font-black uppercase tracking-widest">Reliability</span>
+                           </div>
+                           <p className="text-2xl font-black text-gray-900">{formData.successRate}%</p>
+                           <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase">Success Rate</p>
+                        </div>
+
+                        <div className="bg-purple-50/50 p-5 rounded-[2rem] border border-purple-100/50">
+                           <div className="flex items-center gap-2 text-purple-600 mb-2">
+                              <Award size={18} />
+                              <span className="text-[10px] font-black uppercase tracking-widest">Total</span>
+                           </div>
+                           <p className="text-2xl font-black text-gray-900">{formData.deliveries?.toLocaleString()}</p>
+                           <p className="text-[10px] font-bold text-gray-400 mt-1 uppercase">Job History</p>
+                        </div>
                      </div>
-                  </div>
 
-                  <div className="space-y-2">
-                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-1">Vehicle Type</label>
-                     <select 
-                        value={formData.vehicle}
-                        onChange={(e) => setFormData({...formData, vehicle: e.target.value as any})}
-                        className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 transition-all font-medium text-gray-800 cursor-pointer appearance-none"
-                     >
-                        <option value="Motorcycle">Motorcycle</option>
-                        <option value="Bicycle">Bicycle</option>
-                        <option value="Car">Car</option>
-                     </select>
-                  </div>
-
-                  <div className="space-y-2">
-                     <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-1">Initial Status</label>
-                     <select 
-                        value={formData.status}
-                        onChange={(e) => setFormData({...formData, status: e.target.value as any})}
-                        className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 transition-all font-medium text-gray-800 cursor-pointer appearance-none"
-                     >
-                        <option value="Available">Available</option>
-                        <option value="Offline">Offline</option>
-                        <option value="Break">Break</option>
-                     </select>
+                     <div className="bg-gray-900 p-6 rounded-[2rem] text-white relative overflow-hidden">
+                        <div className="relative z-10">
+                           <h5 className="text-[10px] font-black text-orange-500 uppercase tracking-widest mb-3">Live Dispatch Summary</h5>
+                           <div className="flex items-end justify-between">
+                              <div className="space-y-1">
+                                 <p className="text-3xl font-black">{formData.cancellationRate}%</p>
+                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Cancellation Rate</p>
+                              </div>
+                              <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider border ${(formData.cancellationRate || 0) < 2 ? 'bg-green-500/10 text-green-400 border-green-500/30' : 'bg-red-500/10 text-red-400 border-red-500/30'}`}>
+                                 {(formData.cancellationRate || 0) < 2 ? 'Excellent Standing' : 'Needs Review'}
+                              </div>
+                           </div>
+                        </div>
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                     </div>
                   </div>
                </div>
             </div>
@@ -367,7 +494,7 @@ const DeliveryManagement: React.FC = () => {
             <div className="p-8 border-t border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row gap-4">
                <button 
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 py-4 bg-white border border-gray-200 text-gray-600 rounded-2xl font-bold hover:bg-gray-100 transition-all"
+                  className="flex-1 py-4 bg-white border border-gray-200 text-gray-600 rounded-2xl font-bold hover:bg-gray-100 transition-all shadow-sm"
                >
                   Discard Changes
                </button>
@@ -377,7 +504,7 @@ const DeliveryManagement: React.FC = () => {
                   className="flex-[1.5] py-4 bg-orange-500 text-white rounded-2xl font-black hover:bg-orange-600 transition-all shadow-xl shadow-orange-200 flex items-center justify-center gap-3 disabled:opacity-50"
                >
                   <Save size={20} />
-                  <span>{editingRider ? 'Update Rider' : 'Complete Onboarding'}</span>
+                  <span>{editingRider ? 'Apply Updates' : 'Complete Onboarding'}</span>
                </button>
             </div>
           </div>
