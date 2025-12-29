@@ -125,8 +125,17 @@ export interface User {
   phone?: string;
 }
 
-export type RiderStatus = 'Available' | 'On Delivery' | 'Offline' | 'Break';
+export type RiderStatus = 'Available' | 'On Delivery' | 'Offline' | 'Break' | 'Suspended';
 export type VehicleType = 'Motorcycle' | 'Bicycle' | 'Car';
+
+export interface RiderActivity {
+  id: string;
+  orderId: string;
+  time: string;
+  status: 'On Time' | 'Delayed';
+  rating: number;
+  earnings: number;
+}
 
 export interface Rider {
   id: string;
@@ -143,6 +152,16 @@ export interface Rider {
   avgDeliveryTime: number; // in minutes
   successRate: number; // percentage
   cancellationRate: number; // percentage
+  totalCommission: number; // Total money earned
+  recentActivity?: RiderActivity[];
+  // Rating breakdown
+  ratingDistribution?: {
+    5: number;
+    4: number;
+    3: number;
+    2: number;
+    1: number;
+  };
 }
 
 export interface AuditLogEntry {

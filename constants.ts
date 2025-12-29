@@ -412,12 +412,33 @@ export const ACCOMMODATIONS: Accommodation[] = [
 ];
 
 export const RIDERS: Rider[] = [
-  { id: 'ri1', name: 'James Baguio', phone: '+63 912 345 6789', email: 'james.b@marketcordi.ph', status: 'Available', vehicle: 'Motorcycle', deliveries: 1240, rating: 4.9, avatar: 'https://picsum.photos/seed/ri1/150', avgDeliveryTime: 22, successRate: 99.2, cancellationRate: 0.5 },
-  { id: 'ri2', name: 'Maria Santos', phone: '+63 923 456 7890', email: 'maria.s@marketcordi.ph', status: 'On Delivery', vehicle: 'Motorcycle', deliveries: 856, rating: 4.7, avatar: 'https://picsum.photos/seed/ri2/150', avgDeliveryTime: 28, successRate: 97.5, cancellationRate: 1.2 },
-  { id: 'ri3', name: 'Jun Luna', phone: '+63 934 567 8901', email: 'jun.l@marketcordi.ph', status: 'Break', vehicle: 'Bicycle', deliveries: 432, rating: 4.8, avatar: 'https://picsum.photos/seed/ri3/150', avgDeliveryTime: 35, successRate: 98.8, cancellationRate: 0.2 },
-  { id: 'ri4', name: 'Elena Cruz', phone: '+63 945 678 9012', email: 'elena.c@marketcordi.ph', status: 'Available', vehicle: 'Car', deliveries: 210, rating: 4.5, avatar: 'https://picsum.photos/seed/ri4/150', avgDeliveryTime: 18, successRate: 94.0, cancellationRate: 3.5 },
-  { id: 'ri5', name: 'Rico Blanco', phone: '+63 956 789 0123', email: 'rico.b@marketcordi.ph', status: 'Offline', vehicle: 'Motorcycle', deliveries: 1540, rating: 4.9, avatar: 'https://picsum.photos/seed/ri5/150', avgDeliveryTime: 21, successRate: 99.8, cancellationRate: 0.1 },
-  { id: 'ri6', name: 'Sarah G.', phone: '+63 967 890 1234', email: 'sarah.g@marketcordi.ph', status: 'On Delivery', vehicle: 'Bicycle', deliveries: 95, rating: 4.6, avatar: 'https://picsum.photos/seed/ri6/150', avgDeliveryTime: 42, successRate: 96.2, cancellationRate: 1.0 },
+  { 
+    id: 'ri1', name: 'James Baguio', phone: '+63 912 345 6789', email: 'james.b@marketcordi.ph', status: 'Available', vehicle: 'Motorcycle', deliveries: 1240, rating: 4.9, avatar: 'https://picsum.photos/seed/ri1/150', avgDeliveryTime: 22, successRate: 99.2, cancellationRate: 0.5, totalCommission: 45200.50,
+    recentActivity: [
+      { id: 'ra1', orderId: '#9821', time: '15 mins ago', status: 'On Time', rating: 5.0, earnings: 85.50 },
+      { id: 'ra2', orderId: '#9815', time: '1h ago', status: 'On Time', rating: 4.8, earnings: 120.00 },
+      { id: 'ra3', orderId: '#9799', time: '3h ago', status: 'Delayed', rating: 4.5, earnings: 95.00 },
+    ],
+    ratingDistribution: { 5: 980, 4: 150, 3: 80, 2: 20, 1: 10 }
+  },
+  { 
+    id: 'ri2', name: 'Maria Santos', phone: '+63 923 456 7890', email: 'maria.s@marketcordi.ph', status: 'On Delivery', vehicle: 'Motorcycle', deliveries: 856, rating: 4.7, avatar: 'https://picsum.photos/seed/ri2/150', avgDeliveryTime: 28, successRate: 97.5, cancellationRate: 1.2, totalCommission: 32450.00,
+    recentActivity: [
+      { id: 'ra4', orderId: '#9830', time: 'Now', status: 'On Time', rating: 5.0, earnings: 75.00 },
+      { id: 'ra5', orderId: '#9802', time: '4h ago', status: 'On Time', rating: 4.9, earnings: 110.00 },
+    ],
+    ratingDistribution: { 5: 600, 4: 180, 3: 50, 2: 15, 1: 11 }
+  },
+  { 
+    id: 'ri3', name: 'Jun Luna', phone: '+63 934 567 8901', email: 'jun.l@marketcordi.ph', status: 'Break', vehicle: 'Bicycle', deliveries: 432, rating: 4.8, avatar: 'https://picsum.photos/seed/ri3/150', avgDeliveryTime: 35, successRate: 98.8, cancellationRate: 0.2, totalCommission: 15600.75,
+    recentActivity: [
+      { id: 'ra6', orderId: '#9788', time: 'Yesterday', status: 'On Time', rating: 4.7, earnings: 65.00 },
+    ],
+    ratingDistribution: { 5: 350, 4: 50, 3: 20, 2: 10, 1: 2 }
+  },
+  { id: 'ri4', name: 'Elena Cruz', phone: '+63 945 678 9012', email: 'elena.c@marketcordi.ph', status: 'Available', vehicle: 'Car', deliveries: 210, rating: 4.5, avatar: 'https://picsum.photos/seed/ri4/150', avgDeliveryTime: 18, successRate: 94.0, cancellationRate: 3.5, totalCommission: 8900.25, ratingDistribution: { 5: 120, 4: 50, 3: 25, 2: 10, 1: 5 } },
+  { id: 'ri5', name: 'Rico Blanco', phone: '+63 956 789 0123', email: 'rico.b@marketcordi.ph', status: 'Offline', vehicle: 'Motorcycle', deliveries: 1540, rating: 4.9, avatar: 'https://picsum.photos/seed/ri5/150', avgDeliveryTime: 21, successRate: 99.8, cancellationRate: 0.1, totalCommission: 62300.00, ratingDistribution: { 5: 1450, 4: 60, 3: 20, 2: 8, 1: 2 } },
+  { id: 'ri6', name: 'Sarah G.', phone: '+63 967 890 1234', email: 'sarah.g@marketcordi.ph', status: 'On Delivery', vehicle: 'Bicycle', deliveries: 95, rating: 4.6, avatar: 'https://picsum.photos/seed/ri6/150', avgDeliveryTime: 42, successRate: 96.2, cancellationRate: 1.0, totalCommission: 4500.50, ratingDistribution: { 5: 60, 4: 20, 3: 10, 2: 3, 1: 2 } },
 ];
 
 export const USERS: User[] = [
