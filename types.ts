@@ -47,19 +47,25 @@ export interface Order {
   type: DiningOption;
 }
 
-export type StoreStatus = 'Available' | 'Occupied' | 'Reserved';
+export type StoreStatus = 'Open' | 'Closed' | 'Stock Low' | 'Maintenance';
+export type StoreType = 'Grocery' | 'Pharmacy' | 'Electronics' | 'Boutique' | 'General';
 
 export interface Store {
   id: string;
   name: string;
-  seats: number; // Represents Capacity/Staff
+  address: string;
   status: StoreStatus;
-  currentOrderId?: string;
-  lastActive?: string;
-  // Owner Details
-  ownerName?: string;
-  ownerEmail?: string;
-  ownerPhone?: string;
+  type: StoreType;
+  inventoryCount: number;
+  inventoryLevel: number; // percentage
+  todayRevenue: number;
+  image: string;
+  lastRestocked?: string;
+  ownerName: string;
+  ownerEmail: string;
+  ownerPhone: string;
+  lat?: number;
+  lng?: number;
 }
 
 export type RestaurantStatus = 'Open' | 'Closed' | 'Busy' | 'Maintenance';
@@ -93,22 +99,29 @@ export interface Restaurant {
   // Operation Hours
   openingTime: string;
   closingTime: string;
+  // Business Permits & Compliance
+  permitNumber?: string;
+  tinNumber?: string;
+  sanitaryPermitStatus?: 'Valid' | 'Expired' | 'Pending';
+  fireSafetyPermit?: string;
+  permitExpiry?: string;
 }
 
-export type AccommodationStatus = 'Available' | 'Booked' | 'Maintenance' | 'Cleaning';
+// Added missing types for Accommodation management
 export type RoomType = 'Standard' | 'Deluxe' | 'Suite' | 'Penthouse';
+export type AccommodationStatus = 'Available' | 'Booked' | 'Cleaning' | 'Maintenance';
 
 export interface Accommodation {
   id: string;
   roomNumber: string;
   type: RoomType;
-  pricePerNight: number;
-  status: AccommodationStatus;
   floor: number;
   capacity: number;
-  features: string[];
-  image?: string;
+  pricePerNight: number;
+  status: AccommodationStatus;
+  image: string;
   currentGuest?: string;
+  features: string[];
 }
 
 export type UserRole = 'Admin' | 'Manager' | 'Cashier' | 'Chef' | 'Waiter' | 'Staff';
@@ -162,6 +175,33 @@ export interface Rider {
     2: number;
     1: number;
   };
+  // Structured Address for Logistics
+  address?: string;
+  region?: string;
+  province?: string;
+  city?: string;
+  barangay?: string;
+}
+
+export type MembershipTier = 'Gold' | 'Silver' | 'Bronze' | 'Regular';
+export type CustomerStatus = 'Active' | 'Inactive' | 'Blocked';
+export type CustomerType = 'Regular' | 'Restaurant Owner' | 'Store Owner' | 'Delivery Rider';
+
+export interface Customer {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  avatar: string;
+  joinDate: string;
+  lastOrderDate: string;
+  totalSpent: number;
+  orderCount: number;
+  tier: MembershipTier;
+  status: CustomerStatus;
+  type: CustomerType;
+  address?: string;
+  preferences?: string[];
 }
 
 export interface AuditLogEntry {

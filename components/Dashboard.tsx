@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { TrendingUp, Users, PhilippinePeso, ShoppingBag, ArrowUpRight, ArrowDownRight, Clock, CheckCircle, AlertCircle } from 'lucide-react';
 import { RECENT_ORDERS, REVENUE_DATA, PRODUCTS } from '../constants';
@@ -66,18 +67,18 @@ const Dashboard: React.FC = () => {
   return (
     <div className="flex-1 bg-gray-50 p-4 lg:p-8 lg:ml-64 min-h-screen">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
           <p className="text-sm text-gray-500 mt-1">Welcome back, Alvin! Here's what's happening today.</p>
         </div>
-        <div className="flex space-x-3">
-          <select className="bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium focus:outline-none cursor-pointer hover:bg-gray-50">
+        <div className="flex space-x-3 w-full sm:w-auto">
+          <select className="flex-1 sm:flex-none bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium focus:outline-none cursor-pointer hover:bg-gray-50">
             <option>Today</option>
             <option>This Week</option>
             <option>This Month</option>
           </select>
-          <button className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg shadow-lg shadow-orange-200 text-sm font-medium transition-all">
+          <button className="flex-1 sm:flex-none bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg shadow-lg shadow-orange-200 text-sm font-medium transition-all">
             Export Report
           </button>
         </div>
@@ -122,7 +123,7 @@ const Dashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         {/* Revenue Chart Area */}
         <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2">
             <h3 className="font-bold text-gray-800">Revenue Analytics</h3>
             <div className="flex items-center space-x-2 text-sm text-gray-500">
                <span className="flex items-center"><span className="w-2 h-2 rounded-full bg-orange-500 mr-2"></span>Income</span>
@@ -131,7 +132,7 @@ const Dashboard: React.FC = () => {
           </div>
           
           <div className="h-64 w-full relative">
-            <svg className="w-full h-full overflow-visible" viewBox={`0 0 600 ${chartHeight}`}>
+            <svg className="w-full h-full overflow-visible" viewBox={`0 0 600 ${chartHeight}`} preserveAspectRatio="none">
                {/* Grid Lines */}
                {[0, 1, 2, 3, 4].map((i) => (
                   <line 

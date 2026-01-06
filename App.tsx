@@ -8,36 +8,32 @@ import Dashboard from './components/Dashboard';
 import StoreManagement from './components/TableManagement';
 import RestaurantManagement from './components/RestaurantManagement';
 import RestaurantDetails from './components/RestaurantDetails';
-import AccommodationManagement from './components/AccommodationManagement';
-import AccommodationDetails from './components/AccommodationDetails';
 import DeliveryManagement from './components/DeliveryManagement';
+import CustomerManagement from './components/CustomerManagement';
 import Settings from './components/Settings';
 import LandingPage from './components/LandingPage';
 import LoginPage from './components/LoginPage';
-import { Product, CartItem, Restaurant, Accommodation } from './types';
-import { PRODUCTS, CATEGORIES, RECENT_ORDERS, STORES, RESTAURANTS, ACCOMMODATIONS } from './constants';
-import { ClipboardList } from 'lucide-react';
+import { Product, CartItem, Restaurant } from './types';
+import { PRODUCTS, CATEGORIES, RECENT_ORDERS, STORES, RESTAURANTS } from './constants';
+import { ClipboardList, Menu as MenuIcon } from 'lucide-react';
 
 const App: React.FC = () => {
   // Application-level Routing State
   const [appState, setAppState] = useState<'landing' | 'login' | 'dashboard'>('landing');
   
   // Internal Dashboard Routing State
-  const [currentView, setCurrentView] = useState<'dashboard' | 'menu' | 'stores' | 'restaurants' | 'restaurant-details' | 'accommodations' | 'accommodation-details' | 'delivery' | 'settings'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'menu' | 'stores' | 'restaurants' | 'restaurant-details' | 'delivery' | 'settings' | 'customer'>('dashboard');
   
   const [activeCategory, setActiveCategory] = useState('all');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [activeStoreId, setActiveStoreId] = useState<string>('t1');
   const [isChefOpen, setIsChefOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   // Restaurant State Management
   const [restaurants, setRestaurants] = useState<Restaurant[]>(RESTAURANTS);
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
-
-  // Accommodation State Management
-  const [accommodations, setAccommodations] = useState<Accommodation[]>(ACCOMMODATIONS);
-  const [selectedAccommodation, setSelectedAccommodation] = useState<Accommodation | null>(null);
 
   const handleAddToCart = (product: Product) => {
     setCart(prev => {
@@ -91,6 +87,7 @@ const App: React.FC = () => {
   const handleRestaurantSelect = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
     setCurrentView('restaurant-details');
+    setIsSidebarOpen(false); // Close sidebar on mobile when navigating
   };
 
   const handleRestaurantUpdate = (updated: Restaurant) => {
@@ -98,18 +95,14 @@ const App: React.FC = () => {
     setSelectedRestaurant(updated);
   };
 
-  const handleAccommodationSelect = (accommodation: Accommodation) => {
-    setSelectedAccommodation(accommodation);
-    setCurrentView('accommodation-details');
-  };
-
-  const handleAccommodationUpdate = (updated: Accommodation) => {
-    setAccommodations(prev => prev.map(a => a.id === updated.id ? updated : a));
-    setSelectedAccommodation(updated);
-  };
-
   const handleLogout = () => {
     setAppState('landing');
+    setIsSidebarOpen(false);
+  };
+
+  const handleViewChange = (view: any) => {
+    setCurrentView(view);
+    setIsSidebarOpen(false); // Close sidebar on mobile after selection
   };
 
   // Calculations
@@ -148,24 +141,10 @@ const App: React.FC = () => {
             onUpdate={handleRestaurantUpdate}
           />
         );
-      case 'accommodations':
-        return (
-          <AccommodationManagement
-            accommodations={accommodations}
-            onAccommodationSelect={handleAccommodationSelect}
-          />
-        );
-      case 'accommodation-details':
-        if (!selectedAccommodation) return <AccommodationManagement accommodations={accommodations} onAccommodationSelect={handleAccommodationSelect} />;
-        return (
-          <AccommodationDetails 
-            accommodation={selectedAccommodation}
-            onBack={() => setCurrentView('accommodations')}
-            onUpdate={handleAccommodationUpdate}
-          />
-        );
       case 'delivery':
         return <DeliveryManagement />;
+      case 'customer':
+        return <CustomerManagement />;
       case 'settings':
         return <Settings />;
       case 'menu':
@@ -191,22 +170,39 @@ const App: React.FC = () => {
   }
 
   // Determine sidebar active state
-  let sidebarView: 'dashboard' | 'menu' | 'stores' | 'restaurants' | 'accommodations' | 'delivery' | 'settings' = 'dashboard';
+  let sidebarView: 'dashboard' | 'menu' | 'stores' | 'restaurants' | 'delivery' | 'settings' | 'customer' = 'dashboard';
   if (currentView === 'restaurant-details') { sidebarView = 'restaurants'; } 
-  else if (currentView === 'accommodation-details') { sidebarView = 'accommodations'; } 
-  else if (['dashboard', 'menu', 'stores', 'restaurants', 'accommodations', 'delivery', 'settings'].includes(currentView)) {
+  else if (['dashboard', 'menu', 'stores', 'restaurants', 'delivery', 'settings', 'customer'].includes(currentView)) {
     sidebarView = currentView as any;
   }
 
   return (
     <div className="flex bg-gray-100 min-h-screen relative">
+      {/* Mobile Header with Toggle */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-100 z-30 px-4 flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white font-black text-sm italic shadow-lg shadow-orange-200">
+            M
+          </div>
+          <span className="text-lg font-black text-gray-900 tracking-tight">Market<span className="text-orange-500">Cordi</span></span>
+        </div>
+        <button 
+          onClick={() => setIsSidebarOpen(true)}
+          className="p-2 text-gray-600 hover:bg-gray-50 rounded-xl transition-colors"
+        >
+          <MenuIcon size={24} />
+        </button>
+      </div>
+
       <Sidebar 
         currentView={sidebarView}
-        onViewChange={(view) => setCurrentView(view)}
+        onViewChange={handleViewChange}
         onLogout={handleLogout}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
       
-      <main className="flex-1 flex flex-col lg:flex-row relative">
+      <main className="flex-1 flex flex-col lg:flex-row relative pt-16 lg:pt-0">
         {renderDashboardView()}
       </main>
 

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Product, Category } from '../types';
 import { Search, Plus, Filter } from 'lucide-react';
@@ -27,9 +28,9 @@ const ProductGrid: React.FC<ProductGridProps> = ({
 
   return (
     <div className="flex-1 bg-gray-50 p-4 lg:p-6 lg:ml-64 min-h-screen">
-      {/* Header Mobile */}
-      <div className="lg:hidden flex justify-between items-center mb-6">
-        <h1 className="text-xl font-bold text-gray-800">Menu</h1>
+      {/* Header Mobile - Now handled by App.tsx main layout */}
+      <div className="lg:hidden mb-6 mt-4">
+        <h1 className="text-2xl font-bold text-gray-900">Menu</h1>
       </div>
 
       {/* Desktop Header */}
@@ -64,24 +65,26 @@ const ProductGrid: React.FC<ProductGridProps> = ({
               className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-500 transition-all text-sm"
             />
           </div>
-          <select className="px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none focus:border-orange-500 cursor-pointer min-w-[150px]">
-            <option>All Category</option>
-            <option>Dine In</option>
-          </select>
-          <select className="px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none focus:border-orange-500 cursor-pointer min-w-[150px]">
-            <option>Select Brand</option>
-          </select>
+          <div className="flex gap-3">
+            <select className="flex-1 md:flex-none px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none focus:border-orange-500 cursor-pointer min-w-[120px]">
+              <option>All Category</option>
+              <option>Dine In</option>
+            </select>
+            <select className="flex-1 md:flex-none px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-600 focus:outline-none focus:border-orange-500 cursor-pointer min-w-[120px]">
+              <option>Select Brand</option>
+            </select>
+          </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => onCategoryChange(cat.id)}
-              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+              className={`px-5 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                 activeCategory === cat.id 
                   ? 'bg-orange-500 text-white shadow-md shadow-orange-200' 
-                  : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300'
+                  : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
               }`}
             >
               {cat.name}

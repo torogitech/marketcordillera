@@ -374,7 +374,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
                                     <option>Grocery Store</option>
                                     <option>Pharmacy</option>
                                     <option>Boutique</option>
-                                    <option>Accommodations</option>
                                 </select>
                             </div>
                         </div>
@@ -398,7 +397,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
                             <div className="space-y-2">
                                 <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Phone Number</label>
                                 <div className="relative group">
-                                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-orange-500 transition-colors" size={18} />
+                                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
                                     <input required type="tel" className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 outline-none transition-all font-medium text-gray-800" placeholder="+63 900 000 0000" />
                                 </div>
                             </div>
@@ -407,7 +406,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
                         <div className="space-y-2">
                             <label className="text-xs font-black text-gray-400 uppercase tracking-widest pl-1">Location</label>
                             <div className="relative group">
-                                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-orange-500 transition-colors" size={18} />
+                                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={18} />
                                 <input required type="text" className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-orange-50 focus:border-orange-500 outline-none transition-all font-medium text-gray-800" placeholder="Baguio, Benguet, etc." />
                             </div>
                         </div>
@@ -585,7 +584,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick }) => {
                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl transform -translate-y-1/2 translate-x-1/2"></div>
                         <h3 className="text-2xl font-black mb-4 tracking-tight">Need a faster response?</h3>
                         <p className="text-white/80 font-medium mb-8">Chat with our AI-powered assistant or talk to a live agent through our mobile app.</p>
-                        <button className="bg-white text-orange-600 font-black px-8 py-3 rounded-2xl hover:bg-orange-50 transition-all flex items-center space-x-2">
+                        <button className="bg-white text-orange-600 font-black px-8 py-3 rounded-2xl hover:bg-orange transition-all flex items-center space-x-2">
                             <MessageSquare size={18} />
                             <span>Launch Live Chat</span>
                         </button>

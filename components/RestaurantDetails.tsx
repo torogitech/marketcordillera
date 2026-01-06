@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Restaurant, RestaurantStatus, Product } from '../types';
 import { PRODUCTS, CATEGORIES } from '../constants';
@@ -6,7 +7,8 @@ import {
   Activity, DollarSign, CheckCircle2, AlertTriangle, User, Mail, 
   Phone, Calendar, Star, Utensils, Search, Plus, Flame, Info, 
   Clock, ExternalLink, Settings, Trash2, LayoutGrid, List, X,
-  Type as TypeIcon, Hash, Tag, Upload, ChevronDown, Loader2
+  Type as TypeIcon, Hash, Tag, Upload, ChevronDown, Loader2,
+  ShieldCheck, FileText, HeartPulse, Building2, Gavel
 } from 'lucide-react';
 
 interface RestaurantDetailsProps {
@@ -430,6 +432,116 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, onBac
               </div>
             </div>
           </div>
+
+          {/* Business Permits & Compliance Section */}
+          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+             <h3 className="text-sm font-black text-gray-900 mb-6 flex items-center uppercase tracking-widest">
+                <ShieldCheck size={18} className="mr-2 text-emerald-500" />
+                Permits & Compliance
+             </h3>
+             <div className="space-y-5">
+                <div className="space-y-1.5">
+                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">Business Permit No.</label>
+                   {isEditing ? (
+                      <div className="relative">
+                         <FileText className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300" size={14} />
+                         <input 
+                            type="text" 
+                            name="permitNumber"
+                            value={formData.permitNumber || ''}
+                            onChange={handleInputChange}
+                            className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold focus:bg-white focus:ring-2 focus:ring-orange-100 outline-none transition-all"
+                            placeholder="BP-2024-XXXXX"
+                         />
+                      </div>
+                   ) : (
+                      <p className="text-xs font-black text-gray-800">{formData.permitNumber || 'Not provided'}</p>
+                   )}
+                </div>
+
+                <div className="space-y-1.5">
+                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">Tax Identification (TIN)</label>
+                   {isEditing ? (
+                      <div className="relative">
+                         <Gavel className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300" size={14} />
+                         <input 
+                            type="text" 
+                            name="tinNumber"
+                            value={formData.tinNumber || ''}
+                            onChange={handleInputChange}
+                            className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold focus:bg-white focus:ring-2 focus:ring-orange-100 outline-none transition-all"
+                            placeholder="000-000-000-000"
+                         />
+                      </div>
+                   ) : (
+                      <p className="text-xs font-black text-gray-800">{formData.tinNumber || 'Not provided'}</p>
+                   )}
+                </div>
+
+                <div className="space-y-1.5">
+                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">Sanitary Permit</label>
+                   {isEditing ? (
+                      <select 
+                        name="sanitaryPermitStatus"
+                        value={formData.sanitaryPermitStatus || 'Pending'}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold focus:bg-white focus:ring-2 focus:ring-orange-100 outline-none cursor-pointer"
+                      >
+                         <option value="Valid">Valid / Approved</option>
+                         <option value="Expired">Expired</option>
+                         <option value="Pending">Pending Inspection</option>
+                      </select>
+                   ) : (
+                      <div className={`inline-flex items-center px-2 py-1 rounded-lg text-[10px] font-black uppercase border ${
+                        formData.sanitaryPermitStatus === 'Valid' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
+                        formData.sanitaryPermitStatus === 'Expired' ? 'bg-rose-50 text-rose-600 border-rose-100' :
+                        'bg-amber-50 text-amber-600 border-amber-100'
+                      }`}>
+                         {formData.sanitaryPermitStatus === 'Valid' ? <CheckCircle2 size={12} className="mr-1"/> : <AlertTriangle size={12} className="mr-1"/>}
+                         {formData.sanitaryPermitStatus || 'Pending'}
+                      </div>
+                   )}
+                </div>
+
+                <div className="grid grid-cols-1 gap-5 pt-2">
+                   <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">Fire Safety Certificate</label>
+                      {isEditing ? (
+                         <input 
+                            type="text" 
+                            name="fireSafetyPermit"
+                            value={formData.fireSafetyPermit || ''}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold focus:bg-white outline-none"
+                            placeholder="FS-2024-XXXX"
+                         />
+                      ) : (
+                         <div className="flex items-center gap-2 text-xs font-black text-gray-700">
+                            <Flame size={14} className="text-orange-500" />
+                            {formData.fireSafetyPermit || 'None'}
+                         </div>
+                      )}
+                   </div>
+                   <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">Permit Expiry Date</label>
+                      {isEditing ? (
+                         <input 
+                            type="date" 
+                            name="permitExpiry"
+                            value={formData.permitExpiry || ''}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold focus:bg-white outline-none"
+                         />
+                      ) : (
+                         <div className="flex items-center gap-2 text-xs font-black text-gray-700">
+                            <Calendar size={14} className="text-blue-500" />
+                            {formData.permitExpiry || 'Not set'}
+                         </div>
+                      )}
+                   </div>
+                </div>
+             </div>
+          </div>
         </div>
 
         {/* Right Column */}
@@ -569,6 +681,87 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, onBac
                     className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-500 transition-all font-medium disabled:opacity-70"
                   />
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+            <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center">
+              <User size={20} className="mr-2 text-orange-500" />
+              Owner Contact Details
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Legal Representative</label>
+                <div className="relative">
+                   <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} />
+                   <input
+                     type="text"
+                     name="ownerName"
+                     value={formData.ownerName}
+                     onChange={handleInputChange}
+                     disabled={!isEditing}
+                     className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-500 transition-all font-medium disabled:opacity-70"
+                   />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Business Email</label>
+                <div className="relative">
+                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} />
+                   <input
+                     type="email"
+                     name="ownerEmail"
+                     value={formData.ownerEmail}
+                     onChange={handleInputChange}
+                     disabled={!isEditing}
+                     className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-500 transition-all font-medium disabled:opacity-70"
+                   />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Contact Number</label>
+                <div className="relative">
+                   <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} />
+                   <input
+                     type="tel"
+                     name="ownerPhone"
+                     value={formData.ownerPhone}
+                     onChange={handleInputChange}
+                     disabled={!isEditing}
+                     className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-500 transition-all font-medium disabled:opacity-70"
+                   />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Established Year</label>
+                <div className="relative">
+                   <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} />
+                   <input
+                     type="number"
+                     name="establishedYear"
+                     value={formData.establishedYear}
+                     onChange={handleInputChange}
+                     disabled={!isEditing}
+                     className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-500 transition-all font-medium disabled:opacity-70"
+                   />
+                </div>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Business Description</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  disabled={!isEditing}
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-500 transition-all font-medium disabled:opacity-70 resize-none"
+                ></textarea>
               </div>
             </div>
           </div>

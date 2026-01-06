@@ -4,7 +4,7 @@ import { Restaurant, RestaurantStatus } from '../types';
 import { 
   MapPin, Users, BarChart3, Settings2, CheckCircle2, 
   AlertCircle, CheckSquare, Star, UtensilsCrossed, 
-  BookOpen, ShoppingCart, Activity, X, Map as MapIcon, 
+  Activity, X, Map as MapIcon, 
   LayoutGrid, Crosshair, Search
 } from 'lucide-react';
 
@@ -132,11 +132,6 @@ const RestaurantManagement: React.FC<RestaurantManagementProps> = ({ restaurants
     setSelectedIds(newSet);
   };
 
-  const handleQuickAction = (e: React.MouseEvent, action: string, restaurant: Restaurant) => {
-    e.stopPropagation();
-    alert(`${action} for ${restaurant.name}`);
-  };
-
   const handleRecenter = () => {
     if (mapInstanceRef.current) {
         mapInstanceRef.current.setView(defaultCenter, 13);
@@ -252,33 +247,6 @@ const RestaurantManagement: React.FC<RestaurantManagementProps> = ({ restaurants
                    <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${isSelected ? 'bg-orange-500 border-orange-500' : 'bg-white border-gray-300'}`}>
                       {isSelected && <CheckSquare size={14} className="text-white" />}
                    </div>
-                </div>
-              )}
-
-              {/* Quick Action Hover Bar - Replaces Kebab Menu */}
-              {!isMultiSelect && (
-                <div className="absolute top-0 left-0 right-0 p-2 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-center gap-1 translate-y-[-100%] group-hover:translate-y-0 transition-transform duration-300 z-20 shadow-sm">
-                   <button 
-                     onClick={(e) => handleQuickAction(e, 'Viewing Menu', restaurant)}
-                     title="View Menu"
-                     className="p-2 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all"
-                   >
-                     <BookOpen size={18} />
-                   </button>
-                   <button 
-                     onClick={(e) => handleQuickAction(e, 'Managing Orders', restaurant)}
-                     title="Manage Orders"
-                     className="p-2 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all"
-                   >
-                     <ShoppingCart size={18} />
-                   </button>
-                   <button 
-                     onClick={(e) => handleQuickAction(e, 'Setting Status', restaurant)}
-                     title="Set Status"
-                     className="p-2 text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all"
-                   >
-                     <Activity size={18} />
-                   </button>
                 </div>
               )}
 
