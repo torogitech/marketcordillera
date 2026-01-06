@@ -70,6 +70,14 @@ export interface Store {
 
 export type RestaurantStatus = 'Open' | 'Closed' | 'Busy' | 'Maintenance';
 
+export interface BusinessDocument {
+  id: string;
+  name: string;
+  type: 'PDF' | 'Image' | 'Other';
+  uploadDate: string;
+  url: string;
+}
+
 export interface Restaurant {
   id: string;
   name: string;
@@ -105,6 +113,7 @@ export interface Restaurant {
   sanitaryPermitStatus?: 'Valid' | 'Expired' | 'Pending';
   fireSafetyPermit?: string;
   permitExpiry?: string;
+  documents?: BusinessDocument[];
 }
 
 // Added missing types for Accommodation management

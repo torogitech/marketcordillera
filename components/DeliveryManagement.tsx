@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Rider, RiderStatus, VehicleType, RiderActivity } from '../types';
 import { RIDERS } from '../constants';
@@ -298,8 +297,9 @@ const DeliveryManagement: React.FC = () => {
 
   const handleBatchPayout = () => {
     const selectedRiders = riders.filter(r => selectedRiderIds.has(r.id));
-    // Fix: Explicitly type acc and r in reduce to resolve arithmetic operation errors.
-    const totalPayout = selectedRiders.reduce((acc: number, r: Rider) => acc + (Number(r.totalCommission) || 0), 0);
+    // Fixed: Using totalCommission directly since it is defined as number in the Rider interface.
+    // This avoids arithmetic operation errors when performing addition in reduce.
+    const totalPayout = selectedRiders.reduce((acc: number, r: Rider) => acc + (r.totalCommission || 0), 0);
     
     if (window.confirm(`Initiate payout for ${selectedRiderIds.size} riders?\nTotal Commission: ₱${totalPayout.toLocaleString()}\n\nNote: This will reset their pending commission balances to zero.`)) {
       setRiders(riders.map(r => 
@@ -385,8 +385,8 @@ const DeliveryManagement: React.FC = () => {
            { label: 'Fleet Capacity', value: riders.length, sub: 'Total Personnel', icon: <Users size={24} />, color: 'orange', trend: '+4 New' },
            { label: 'Duty Cycle', value: riders.filter(r => r.status === 'Available' || r.status === 'On Delivery').length, sub: 'Active Now', icon: <Zap size={24} />, color: 'green', trend: 'Live' },
            { label: 'Volume Today', value: '432', sub: 'Completed Drops', icon: <ShoppingBag size={24} />, color: 'blue', trend: '+12.4%' },
-           // Fix: Explicitly type acc and r in reduce to resolve arithmetic operation errors.
-           { label: 'Fleet Revenue', value: `₱${riders.reduce((acc: number, r: Rider) => acc + (Number(r.totalCommission) || 0), 0).toLocaleString()}`, sub: 'LTD Commission', icon: <PhilippinePeso size={24} />, color: 'purple', trend: 'Secured' }
+           // Fixed: Using totalCommission directly since it is defined as number in the Rider interface.
+           { label: 'Fleet Revenue', value: `₱${riders.reduce((acc: number, r: Rider) => acc + (r.totalCommission || 0), 0).toLocaleString()}`, sub: 'LTD Commission', icon: <PhilippinePeso size={24} />, color: 'purple', trend: 'Secured' }
          ].map((stat, i) => (
            <div key={i} className="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group overflow-hidden relative">
               <div className="flex justify-between items-start mb-6 relative z-10">

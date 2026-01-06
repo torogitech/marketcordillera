@@ -306,7 +306,11 @@ export const RESTAURANTS: Restaurant[] = [
     tinNumber: '123-456-789-000',
     sanitaryPermitStatus: 'Valid',
     fireSafetyPermit: 'FS-2024-8821',
-    permitExpiry: '2025-12-31'
+    permitExpiry: '2025-12-31',
+    documents: [
+      { id: 'doc1', name: 'Mayor\'s Permit 2024', type: 'PDF', uploadDate: 'Jan 15, 2024', url: '#' },
+      { id: 'doc2', name: 'BIR Certificate', type: 'Image', uploadDate: 'Jan 10, 2024', url: '#' }
+    ]
   },
   { 
     id: 'r2', 
@@ -332,7 +336,8 @@ export const RESTAURANTS: Restaurant[] = [
     tinNumber: '998-765-432-000',
     sanitaryPermitStatus: 'Valid',
     fireSafetyPermit: 'FS-2024-1102',
-    permitExpiry: '2025-06-15'
+    permitExpiry: '2025-06-15',
+    documents: []
   },
   { 
     id: 'r3', 
