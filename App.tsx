@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import ProductGrid from './components/ProductGrid';
@@ -6,15 +5,17 @@ import CartPanel from './components/CartPanel';
 import ChefAssistant from './components/ChefAssistant';
 import Dashboard from './components/Dashboard';
 import StoreManagement from './components/TableManagement';
+import StoreDetails from './components/StoreDetails';
 import RestaurantManagement from './components/RestaurantManagement';
 import RestaurantDetails from './components/RestaurantDetails';
 import DeliveryManagement from './components/DeliveryManagement';
 import CustomerManagement from './components/CustomerManagement';
+import AdsManager from './components/AdsManager';
 import Settings from './components/Settings';
 import LandingPage from './components/LandingPage';
 import LoginPage from './components/LoginPage';
-import { Product, CartItem, Restaurant } from './types';
-import { PRODUCTS, CATEGORIES, RECENT_ORDERS, STORES, RESTAURANTS } from './constants';
+import { Product, CartItem, Restaurant, Store, Ad } from './types';
+import { PRODUCTS, CATEGORIES, RECENT_ORDERS, STORES, RESTAURANTS, MOCK_ADS } from './constants';
 import { ClipboardList, Menu as MenuIcon } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -22,7 +23,7 @@ const App: React.FC = () => {
   const [appState, setAppState] = useState<'landing' | 'login' | 'dashboard'>('landing');
   
   // Internal Dashboard Routing State
-  const [currentView, setCurrentView] = useState<'dashboard' | 'menu' | 'stores' | 'restaurants' | 'restaurant-details' | 'delivery' | 'settings' | 'customer'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'menu' | 'stores' | 'store-details' | 'restaurants' | 'restaurant-details' | 'delivery' | 'settings' | 'customer' | 'ads'>('dashboard');
   
   const [activeCategory, setActiveCategory] = useState('all');
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -31,9 +32,12 @@ const App: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
-  // Restaurant State Management
+  // Entity State Management
   const [restaurants, setRestaurants] = useState<Restaurant[]>(RESTAURANTS);
+  const [stores, setStores] = useState<Store[]>(STORES);
+  const [ads, setAds] = useState<Ad[]>(MOCK_ADS);
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
 
   const handleAddToCart = (product: Product) => {
     setCart(prev => {
@@ -66,7 +70,7 @@ const App: React.FC = () => {
   const handleSwitchStore = (storeId: string) => {
     if (storeId === activeStoreId) return;
     setActiveStoreId(storeId);
-    const storeObj = STORES.find(s => s.id === storeId);
+    const storeObj = stores.find(s => s.id === storeId);
     if (!storeObj) return;
     const mockOrder = RECENT_ORDERS.find(o => o.store === storeObj.name);
     if (mockOrder) {
@@ -87,12 +91,26 @@ const App: React.FC = () => {
   const handleRestaurantSelect = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
     setCurrentView('restaurant-details');
-    setIsSidebarOpen(false); // Close sidebar on mobile when navigating
+    setIsSidebarOpen(false);
+  };
+
+  const handleStoreSelect = (storeId: string) => {
+    const store = stores.find(s => s.id === storeId);
+    if (store) {
+      setSelectedStore(store);
+      setCurrentView('store-details');
+      setIsSidebarOpen(false);
+    }
   };
 
   const handleRestaurantUpdate = (updated: Restaurant) => {
     setRestaurants(prev => prev.map(r => r.id === updated.id ? updated : r));
     setSelectedRestaurant(updated);
+  };
+
+  const handleStoreUpdate = (updated: Store) => {
+    setStores(prev => prev.map(s => s.id === updated.id ? updated : s));
+    setSelectedStore(updated);
   };
 
   const handleLogout = () => {
@@ -102,7 +120,7 @@ const App: React.FC = () => {
 
   const handleViewChange = (view: any) => {
     setCurrentView(view);
-    setIsSidebarOpen(false); // Close sidebar on mobile after selection
+    setIsSidebarOpen(false);
   };
 
   // Calculations
@@ -120,9 +138,19 @@ const App: React.FC = () => {
           <StoreManagement 
             cart={cart}
             activeStoreId={activeStoreId}
-            onStoreSelect={handleSwitchStore}
+            onStoreSelect={handleStoreSelect}
             onNavigateToMenu={() => setCurrentView('menu')}
             onOpenCart={() => setIsCartOpen(true)}
+          />
+        );
+      case 'store-details':
+        if (!selectedStore) return <StoreManagement onStoreSelect={handleStoreSelect} />;
+        return (
+          <StoreDetails 
+            store={selectedStore}
+            onBack={() => setCurrentView('stores')}
+            onUpdate={handleStoreUpdate}
+            onManageInventory={() => setCurrentView('menu')}
           />
         );
       case 'restaurants':
@@ -145,10 +173,11 @@ const App: React.FC = () => {
         return <DeliveryManagement />;
       case 'customer':
         return <CustomerManagement />;
+      case 'ads':
+        return <AdsManager ads={ads} onUpdateAds={setAds} />;
       case 'settings':
         return <Settings />;
       case 'menu':
-      default:
         return (
           <ProductGrid 
             products={PRODUCTS}
@@ -158,11 +187,13 @@ const App: React.FC = () => {
             onAddToCart={handleAddToCart}
           />
         );
+      default:
+        return <Dashboard />;
     }
   };
 
   if (appState === 'landing') {
-    return <LandingPage onLoginClick={() => setAppState('login')} />;
+    return <LandingPage ads={ads} onLoginClick={() => setAppState('login')} />;
   }
 
   if (appState === 'login') {
@@ -170,9 +201,10 @@ const App: React.FC = () => {
   }
 
   // Determine sidebar active state
-  let sidebarView: 'dashboard' | 'menu' | 'stores' | 'restaurants' | 'delivery' | 'settings' | 'customer' = 'dashboard';
+  let sidebarView: 'dashboard' | 'stores' | 'restaurants' | 'delivery' | 'settings' | 'customer' | 'ads' = 'dashboard';
   if (currentView === 'restaurant-details') { sidebarView = 'restaurants'; } 
-  else if (['dashboard', 'menu', 'stores', 'restaurants', 'delivery', 'settings', 'customer'].includes(currentView)) {
+  else if (currentView === 'store-details' || currentView === 'menu') { sidebarView = 'stores'; }
+  else if (['dashboard', 'stores', 'restaurants', 'delivery', 'settings', 'customer', 'ads'].includes(currentView)) {
     sidebarView = currentView as any;
   }
 

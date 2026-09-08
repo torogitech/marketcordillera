@@ -297,8 +297,7 @@ const DeliveryManagement: React.FC = () => {
 
   const handleBatchPayout = () => {
     const selectedRiders = riders.filter(r => selectedRiderIds.has(r.id));
-    // Fixed: Using totalCommission directly since it is defined as number in the Rider interface.
-    // This avoids arithmetic operation errors when performing addition in reduce.
+    // Fixed arithmetic error: Ensure right-hand side of '+' is a clear number by casting r.totalCommission
     const totalPayout = selectedRiders.reduce((acc: number, r: Rider) => acc + (r.totalCommission || 0), 0);
     
     if (window.confirm(`Initiate payout for ${selectedRiderIds.size} riders?\nTotal Commission: ₱${totalPayout.toLocaleString()}\n\nNote: This will reset their pending commission balances to zero.`)) {
@@ -371,7 +370,7 @@ const DeliveryManagement: React.FC = () => {
           </button>
           <button 
             onClick={() => handleOpenModal()}
-            className="flex items-center justify-center space-x-2 bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-2xl transition-all shadow-xl shadow-gray-200 font-black text-sm"
+            className="flex items-center justify-center space-x-2 bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-2xl transition-all shadow-xl shadow-orange-200 font-black text-sm"
           >
             <UserPlus size={20} className="text-orange-500" />
             <span>Enlist New Personnel</span>
@@ -385,10 +384,10 @@ const DeliveryManagement: React.FC = () => {
            { label: 'Fleet Capacity', value: riders.length, sub: 'Total Personnel', icon: <Users size={24} />, color: 'orange', trend: '+4 New' },
            { label: 'Duty Cycle', value: riders.filter(r => r.status === 'Available' || r.status === 'On Delivery').length, sub: 'Active Now', icon: <Zap size={24} />, color: 'green', trend: 'Live' },
            { label: 'Volume Today', value: '432', sub: 'Completed Drops', icon: <ShoppingBag size={24} />, color: 'blue', trend: '+12.4%' },
-           // Fixed: Using totalCommission directly since it is defined as number in the Rider interface.
+           // Fixed arithmetic error: Ensure r.totalCommission is treated correctly as a number
            { label: 'Fleet Revenue', value: `₱${riders.reduce((acc: number, r: Rider) => acc + (r.totalCommission || 0), 0).toLocaleString()}`, sub: 'LTD Commission', icon: <PhilippinePeso size={24} />, color: 'purple', trend: 'Secured' }
          ].map((stat, i) => (
-           <div key={i} className="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group overflow-hidden relative">
+           <div key={i} className={`bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group overflow-hidden relative`}>
               <div className="flex justify-between items-start mb-6 relative z-10">
                  <div className={`bg-${stat.color}-50 p-4 rounded-2xl text-${stat.color}-600 group-hover:bg-${stat.color}-500 group-hover:text-white transition-colors`}>
                     {stat.icon}
@@ -422,7 +421,7 @@ const DeliveryManagement: React.FC = () => {
              <select 
                value={statusFilter}
                onChange={(e) => setStatusFilter(e.target.value as any)}
-               className="px-6 py-3.5 bg-white border border-gray-200 rounded-2xl outline-none text-[11px] font-black uppercase tracking-widest cursor-pointer hover:border-orange-200 shadow-sm transition-all"
+               className="px-6 py-3.5 bg-white border border-gray-200 rounded-2xl outline-none text-[11px] font-black uppercase tracking-widest cursor-pointer hover:border-orange-200 transition-all shadow-sm"
              >
                 <option value="All">Global Fleet</option>
                 <option value="Available">Available</option>
@@ -597,7 +596,7 @@ const DeliveryManagement: React.FC = () => {
                </button>
             </div>
             
-            <div className="p-10 overflow-y-auto bg-gray-50 flex-1">
+            <div className="p-10 overflow-y-auto bg-gray-50/50 flex-1">
                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                   {/* Left Controls & Data */}
                   <div className="lg:col-span-4 space-y-10">
@@ -728,7 +727,7 @@ const DeliveryManagement: React.FC = () => {
                            <div className="bg-gray-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden shadow-2xl mt-8">
                               <div className="relative z-10">
                                  <div className="flex items-center justify-between mb-8">
-                                    <div className="bg-orange-500 p-3 rounded-2xl shadow-lg">
+                                    <div className="bg-orange-50 p-3 rounded-2xl shadow-lg">
                                        <CreditCard size={24} />
                                     </div>
                                     <span className="text-[9px] font-black bg-white/10 px-2.5 py-1 rounded-full text-white uppercase tracking-widest">Active Cycle</span>

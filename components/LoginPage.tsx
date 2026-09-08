@@ -47,7 +47,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onBackToLanding }
                <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white font-black text-xl italic shadow-lg shadow-orange-500/20">
                  M
                </div>
-               <span className="text-2xl font-black tracking-tight">MarketCordi<span className="text-orange-500">.</span></span>
+               <span className="text-2xl font-black tracking-tight">Mossy Market<span className="text-orange-500">.</span></span>
              </div>
 
              <h1 className="text-4xl font-black leading-tight tracking-tighter">
@@ -150,7 +150,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onBackToLanding }
 
           <div className="mt-12 text-center">
              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest leading-loose">
-                Problems signing in? <br/> Contact <a href="mailto:support@marketcordi.com" className="text-orange-500 hover:underline">MarketCordi Tech Support</a>
+                Problems signing in? <br/> Contact <a href="mailto:support@mossymarket.com" className="text-orange-500 hover:underline">Mossy Market Tech Support</a>
              </p>
           </div>
         </div>

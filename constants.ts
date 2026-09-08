@@ -1,5 +1,5 @@
 
-import { Category, Product, Order, DiningOption, Store, Restaurant, User, Rider, AuditLogEntry, Customer } from './types';
+import { Category, Product, Order, DiningOption, Store, Restaurant, User, Rider, AuditLogEntry, Customer, Ad } from './types';
 
 export const CATEGORIES: Category[] = [
   { id: 'all', name: 'Show All' },
@@ -38,6 +38,8 @@ export const PRODUCTS: Product[] = [
     category: 'salad',
     image: 'https://picsum.photos/seed/salad1/300/300',
     calories: 120,
+    prepTime: 12,
+    nutrients: { protein: 18, fat: 4, carbs: 8 },
     ingredients: ['Fresh Shrimp', 'Thai Basil', 'Romaine Lettuce', 'Cherry Tomatoes', 'Lime Vinaigrette']
   },
   {
@@ -47,6 +49,8 @@ export const PRODUCTS: Product[] = [
     category: 'salad',
     image: 'https://picsum.photos/seed/onion/300/300',
     calories: 250,
+    prepTime: 8,
+    nutrients: { protein: 3, fat: 12, carbs: 32 },
     ingredients: ['White Onion', 'Tempura Batter', 'Breadcrumbs', 'Sea Salt', 'Paprika']
   },
   {
@@ -56,6 +60,8 @@ export const PRODUCTS: Product[] = [
     category: 'burger',
     image: 'https://picsum.photos/seed/bacon/300/300',
     calories: 400,
+    prepTime: 15,
+    nutrients: { protein: 22, fat: 35, carbs: 2 },
     ingredients: ['Pork Belly', 'Hickory Smoke', 'Brown Sugar', 'Black Pepper']
   },
   {
@@ -65,6 +71,8 @@ export const PRODUCTS: Product[] = [
     category: 'salad',
     image: 'https://picsum.photos/seed/tomato/300/300',
     calories: 40,
+    prepTime: 5,
+    nutrients: { protein: 1, fat: 0, carbs: 9 },
     ingredients: ['Organic Vine Tomatoes']
   },
   {
@@ -74,6 +82,8 @@ export const PRODUCTS: Product[] = [
     category: 'burger',
     image: 'https://picsum.photos/seed/chicken/300/300',
     calories: 550,
+    prepTime: 18,
+    nutrients: { protein: 32, fat: 22, carbs: 48 },
     ingredients: ['Grilled Chicken Breast', 'Sesame Bun', 'Lettuce', 'Mayo', 'Pickles']
   },
   {
@@ -83,6 +93,8 @@ export const PRODUCTS: Product[] = [
     category: 'salad',
     image: 'https://picsum.photos/seed/redonion/300/300',
     calories: 120,
+    prepTime: 10,
+    nutrients: { protein: 2, fat: 5, carbs: 18 },
     ingredients: ['Red Onion', 'Cornmeal', 'Spices', 'Vegetable Oil']
   },
   {
@@ -92,6 +104,8 @@ export const PRODUCTS: Product[] = [
     category: 'burger',
     image: 'https://picsum.photos/seed/beef/300/300',
     calories: 600,
+    prepTime: 20,
+    nutrients: { protein: 38, fat: 32, carbs: 52 },
     ingredients: ['Angus Beef Patty', 'Cheddar Cheese', 'Brioche Bun', 'Caramelized Onions', 'BBQ Sauce']
   },
   {
@@ -101,6 +115,8 @@ export const PRODUCTS: Product[] = [
     category: 'burger',
     image: 'https://picsum.photos/seed/grilled/300/300',
     calories: 580,
+    prepTime: 22,
+    nutrients: { protein: 35, fat: 28, carbs: 50 },
     ingredients: ['Flame Grilled Patty', 'Whole Wheat Bun', 'Mustard', 'Tomato Slices']
   },
   {
@@ -110,6 +126,8 @@ export const PRODUCTS: Product[] = [
     category: 'pizza',
     image: 'https://picsum.photos/seed/vegepizza/300/300',
     calories: 450,
+    prepTime: 25,
+    nutrients: { protein: 15, fat: 18, carbs: 62 },
     ingredients: ['Pizza Dough', 'Tomato Sauce', 'Mozzarella', 'Bell Peppers', 'Mushrooms', 'Olives']
   },
   {
@@ -119,6 +137,8 @@ export const PRODUCTS: Product[] = [
     category: 'seafood',
     image: 'https://picsum.photos/seed/fish/300/300',
     calories: 700,
+    prepTime: 20,
+    nutrients: { protein: 28, fat: 38, carbs: 65 },
     ingredients: ['Cod Fillet', 'Beer Batter', 'Potato Fries', 'Tartar Sauce', 'Lemon Wedge']
   },
 ];
@@ -427,6 +447,51 @@ export const RESTAURANTS: Restaurant[] = [
     lng: 120.6100,
     sanitaryPermitStatus: 'Valid'
   },
+];
+
+export const MOCK_ADS: Ad[] = [
+  {
+    id: 'ad1',
+    title: 'Weekend Steak Special',
+    description: '20% off on all premium steaks at Gourmet Central this weekend!',
+    targetType: 'Restaurant',
+    targetId: 'r1',
+    image: 'https://images.unsplash.com/photo-1546241072-48010ad28c2c?auto=format&fit=crop&q=80&w=800',
+    status: 'Active',
+    reach: 4500,
+    clicks: 320,
+    budget: 5000,
+    startDate: '2024-10-12',
+    endDate: '2024-10-14'
+  },
+  {
+    id: 'ad2',
+    title: 'New Tech Arrival',
+    description: 'Latest M3 MacBooks now available at Cordi Electronics. Zero-interest installment plans!',
+    targetType: 'Store',
+    targetId: 's2',
+    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=800',
+    status: 'Scheduled',
+    reach: 0,
+    clicks: 0,
+    budget: 15000,
+    startDate: '2024-11-01',
+    endDate: '2024-11-15'
+  },
+  {
+    id: 'ad3',
+    title: 'Fresh Organic Harvest',
+    description: 'Direct from La Trinidad farms! Get the freshest highland veggies at Veggie Hub.',
+    targetType: 'Store',
+    targetId: 's5',
+    image: 'https://images.unsplash.com/photo-1488459711635-de84fd23d5fa?auto=format&fit=crop&q=80&w=800',
+    status: 'Active',
+    reach: 12000,
+    clicks: 840,
+    budget: 2500,
+    startDate: '2024-10-01',
+    endDate: '2024-10-31'
+  }
 ];
 
 export const RIDERS: Rider[] = [

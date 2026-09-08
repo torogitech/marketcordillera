@@ -9,7 +9,7 @@ import {
   Clock, ExternalLink, Settings, Trash2, LayoutGrid, List, X,
   Type as TypeIcon, Hash, Tag, Upload, ChevronDown, Loader2,
   ShieldCheck, FileText, HeartPulse, Building2, Gavel, FileCode,
-  Eye, Download as DownloadIcon, Files
+  Eye, Download as DownloadIcon, Files, Timer, Zap
 } from 'lucide-react';
 
 interface RestaurantDetailsProps {
@@ -194,7 +194,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, onBac
 
   const openProductModal = (product?: Product) => {
     if (product) setEditingProduct({ ...product });
-    else setEditingProduct({ name: '', price: 0, category: 'burger', image: 'https://picsum.photos/seed/newitem/300/300', calories: 0, ingredients: [] });
+    else setEditingProduct({ name: '', price: 0, category: 'burger', image: 'https://picsum.photos/seed/newitem/300/300', calories: 0, ingredients: [], prepTime: 15, nutrients: { protein: 0, fat: 0, carbs: 0 } });
     setIsProductModalOpen(true);
   };
 
@@ -206,7 +206,20 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, onBac
   const handleProductInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     if (!editingProduct) return;
     const { name, value } = e.target;
-    setEditingProduct(prev => ({ ...prev!, [name]: name === 'price' || name === 'calories' ? Number(value) : value }));
+    
+    if (name.startsWith('nutrient_')) {
+      const nutrientKey = name.split('_')[1];
+      setEditingProduct(prev => ({
+        ...prev!,
+        nutrients: {
+          ...(prev?.nutrients || {}),
+          [nutrientKey]: Number(value)
+        }
+      }));
+      return;
+    }
+
+    setEditingProduct(prev => ({ ...prev!, [name]: name === 'price' || name === 'calories' || name === 'prepTime' ? Number(value) : value }));
   };
 
   const handleImageClick = () => fileInputRef.current?.click();
@@ -347,7 +360,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, onBac
             </div>
           </div>
 
-          {/* Business Permits & Compliance Section */}
           <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
              <h3 className="text-sm font-black text-gray-900 mb-6 flex items-center uppercase tracking-widest">
                 <ShieldCheck size={18} className="mr-2 text-emerald-500" />
@@ -400,7 +412,6 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, onBac
              </div>
           </div>
 
-          {/* Business Documentation Section - NEW */}
           <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
              <div className="flex items-center justify-between mb-6">
                 <h3 className="text-sm font-black text-gray-900 flex items-center uppercase tracking-widest">
@@ -491,7 +502,7 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, onBac
             <div><h3 className="text-2xl font-bold text-gray-900">Menu Items</h3><p className="text-sm text-gray-500 mt-1">Products available at this location</p></div>
             <div className="flex items-center space-x-2">
                 {isManagingMenu ? <button onClick={() => setIsManagingMenu(false)} className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white font-medium hover:bg-gray-800 transition-all text-sm"><CheckCircle2 size={18} /><span>Finish Managing</span></button> : <button onClick={() => setIsManagingMenu(true)} className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-all text-sm shadow-sm"><Settings size={18} /><span>Manage Menu</span></button>}
-                <button onClick={() => openProductModal()} className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-xl shadow-lg shadow-orange-200 transition-all text-sm font-bold flex items-center"><Plus size={18} className="mr-2" /> Add Item</button>
+                <button onClick={() => openProductModal()} className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-xl shadow-lg shadow-orange-200 transition-all text-sm font-bold flex items-center">Add Item</button>
             </div>
         </div>
 
@@ -502,10 +513,51 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, onBac
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
-               <div key={product.id} className={`bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col group relative ${isManagingMenu ? 'ring-2 ring-orange-100' : ''}`}>
+               <div key={product.id} className={`bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col group relative ${isManagingMenu ? 'ring-2 ring-orange-100' : ''}`}>
                   {isManagingMenu && (<div className="absolute top-3 right-3 z-10 flex gap-2 animate-[fadeIn_0.2s_ease-out]"><button className="bg-white/90 backdrop-blur-md p-2 rounded-lg text-orange-600 hover:bg-orange-500 hover:text-white transition-all shadow-sm" onClick={(e) => { e.stopPropagation(); openProductModal(product); }}><Edit3 size={16} /></button><button className="bg-white/90 backdrop-blur-md p-2 rounded-lg text-red-600 hover:bg-red-500 hover:text-white transition-all shadow-sm" onClick={(e) => { e.stopPropagation(); if(window.confirm(`Remove ${product.name}?`)) alert('Removed'); }}><Trash2 size={16} /></button></div>)}
-                  <div className="h-44 w-full relative overflow-hidden bg-gray-100"><img src={product.image} alt={product.name} className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${isManagingMenu ? 'opacity-80' : ''}`}/><div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md text-gray-900 text-[10px] font-bold px-2.5 py-1 rounded-lg uppercase border shadow-sm">{product.category}</div></div>
-                  <div className="p-5 flex flex-col flex-1"><div className="flex justify-between items-start mb-2 gap-2"><h3 className="font-bold text-gray-900 text-base line-clamp-1 flex-1">{product.name}</h3><span className="font-bold text-orange-600 text-sm">₱{product.price.toFixed(2)}</span></div><div className="flex items-center space-x-4 text-[10px] text-gray-500 mb-4">{product.calories && (<div className="flex items-center text-orange-700 font-semibold"><Flame size={12} className="mr-1 text-orange-500 fill-orange-500" />{product.calories} kcal</div>)}<div className="flex items-center text-gray-400 font-semibold"><Info size={12} className="mr-1" />Details</div></div><div className="mt-auto border-t border-gray-50 pt-4"><p className="text-[11px] text-gray-500 line-clamp-2 italic">{product.ingredients?.join(', ') || 'Standard recipe ingredients.'}</p></div></div>
+                  <div className="h-48 w-full relative overflow-hidden bg-gray-100"><img src={product.image} alt={product.name} className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${isManagingMenu ? 'opacity-80' : ''}`}/><div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-md text-gray-900 text-[10px] font-black px-2.5 py-1 rounded-lg uppercase border border-white shadow-lg">{product.category}</div></div>
+                  <div className="p-6 flex flex-col flex-1">
+                     <div className="flex justify-between items-start mb-3 gap-2">
+                        <h3 className="font-black text-gray-900 text-lg line-clamp-1 flex-1">{product.name}</h3>
+                        <span className="font-black text-orange-600 text-base">₱{product.price.toFixed(2)}</span>
+                     </div>
+                     
+                     <div className="grid grid-cols-2 gap-2 mb-4">
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-1.5 rounded-lg border border-gray-100">
+                           <Timer size={12} className="text-orange-500" />
+                           <span>{product.prepTime || 15} min prep</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-gray-500 bg-gray-50 px-2 py-1.5 rounded-lg border border-gray-100">
+                           <Flame size={12} className="text-rose-500" />
+                           <span>{product.calories} kcal</span>
+                        </div>
+                     </div>
+
+                     {product.nutrients && (
+                        <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
+                           <div className="flex flex-col items-center min-w-[40px] bg-emerald-50 rounded-lg p-1.5 border border-emerald-100">
+                              <span className="text-[8px] font-black text-emerald-600 uppercase">Protein</span>
+                              <span className="text-xs font-black text-emerald-800">{product.nutrients.protein}g</span>
+                           </div>
+                           <div className="flex flex-col items-center min-w-[40px] bg-amber-50 rounded-lg p-1.5 border border-amber-100">
+                              <span className="text-[8px] font-black text-amber-600 uppercase">Fat</span>
+                              <span className="text-xs font-black text-amber-800">{product.nutrients.fat}g</span>
+                           </div>
+                           <div className="flex flex-col items-center min-w-[40px] bg-blue-50 rounded-lg p-1.5 border border-blue-100">
+                              <span className="text-[8px] font-black text-blue-600 uppercase">Carbs</span>
+                              <span className="text-xs font-black text-blue-800">{product.nutrients.carbs}g</span>
+                           </div>
+                        </div>
+                     )}
+
+                     <div className="mt-auto border-t border-gray-100 pt-4">
+                        <div className="flex items-center gap-1 mb-2">
+                           <Zap size={10} className="text-orange-500" />
+                           <span className="text-[9px] font-black uppercase text-gray-400 tracking-widest">Ingredients</span>
+                        </div>
+                        <p className="text-[11px] text-gray-500 line-clamp-2 font-medium italic leading-relaxed">{product.ingredients?.join(', ') || 'Standard recipe ingredients.'}</p>
+                     </div>
+                  </div>
                </div>
             ))}
         </div>
@@ -514,12 +566,49 @@ const RestaurantDetails: React.FC<RestaurantDetailsProps> = ({ restaurant, onBac
       {/* Product Management Modal */}
       {isProductModalOpen && editingProduct && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]">
-          <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
-            <div className="bg-gray-900 p-6 flex justify-between items-center text-white"><div className="flex items-center gap-3"><div className="bg-orange-500 p-2 rounded-xl text-white"><Utensils size={20} /></div><div><h3 className="font-bold text-lg">{editingProduct.id ? 'Edit Menu Item' : 'New Menu Item'}</h3><p className="text-xs text-gray-400">Update item details</p></div></div><button onClick={() => setIsProductModalOpen(false)} className="p-2 rounded-full hover:bg-white/10 text-gray-400 transition-colors"><X size={20} /></button></div>
-            <div className="p-8 overflow-y-auto space-y-6"><div className="flex flex-col items-center gap-4"><div className="relative group w-32 h-32 cursor-pointer" onClick={handleImageClick}><img src={editingProduct.image} className="w-full h-full object-cover rounded-2xl border-4 border-gray-50 shadow-sm"/><div className="absolute inset-0 bg-black/40 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><div className="text-center"><Upload size={24} className="text-white mx-auto mb-1"/><span className="text-[10px] text-white font-bold uppercase tracking-wider">Change Image</span></div></div><input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageChange}/></div></div>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-5"><div className="md:col-span-2 space-y-1.5"><label className="text-xs font-bold text-gray-400 uppercase block">Product Name</label><div className="relative"><TypeIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} /><input type="text" name="name" value={editingProduct.name} onChange={handleProductInputChange} className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white outline-none text-sm font-medium" placeholder="Classic Beef Burger"/></div></div><div className="space-y-1.5"><label className="text-xs font-bold text-gray-400 uppercase block">Price (₱)</label><div className="relative"><DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} /><input type="number" name="price" value={editingProduct.price} onChange={handleProductInputChange} className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white outline-none text-sm font-medium" placeholder="0.00"/></div></div><div className="space-y-1.5"><label className="text-xs font-bold text-gray-400 uppercase block">Category</label><div className="relative"><Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} /><select name="category" value={editingProduct.category} onChange={handleProductInputChange} className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white outline-none text-sm font-medium appearance-none">{CATEGORIES.filter(c => c.id !== 'all').map(cat => (<option key={cat.id} value={cat.id}>{cat.name}</option>))}</select></div></div></div>
+          <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="bg-gray-900 p-8 flex justify-between items-center text-white"><div className="flex items-center gap-5"><div className="bg-orange-500 p-3 rounded-2xl text-white shadow-lg"><Utensils size={24} /></div><div><h3 className="font-black text-xl tracking-tight">{editingProduct.id ? 'Refine Menu Item' : 'New Culinary Entry'}</h3><p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1">Culinary Asset Registry</p></div></div><button onClick={() => setIsProductModalOpen(false)} className="p-2 rounded-full hover:bg-white/10 text-gray-400 transition-colors"><X size={24} /></button></div>
+            <div className="p-10 overflow-y-auto space-y-8 bg-gray-50">
+               <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                  <div className="md:col-span-4 flex flex-col items-center gap-4">
+                     <div className="relative group w-full aspect-square cursor-pointer" onClick={handleImageClick}>
+                        <img src={editingProduct.image} className="w-full h-full object-cover rounded-[2rem] border-8 border-white shadow-xl"/>
+                        <div className="absolute inset-0 bg-black/40 rounded-[2rem] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                           <div className="text-center">
+                              <Upload size={32} className="text-white mx-auto mb-2"/>
+                              <span className="text-[10px] text-white font-black uppercase tracking-widest">Update Visual</span>
+                           </div>
+                        </div>
+                        <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageChange}/>
+                     </div>
+                     <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest text-center">Standard Aspect Ratio (1:1)</p>
+                  </div>
+
+                  <div className="md:col-span-8 space-y-6">
+                     <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 space-y-5">
+                        <div className="space-y-1.5"><label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-1">Product Title</label><div className="relative"><TypeIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} /><input type="text" name="name" value={editingProduct.name} onChange={handleProductInputChange} className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none text-sm font-black text-gray-800" placeholder="e.g. Traditional Adobo"/></div></div>
+                        <div className="grid grid-cols-2 gap-4">
+                           <div className="space-y-1.5"><label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-1">Price (₱)</label><div className="relative"><DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} /><input type="number" name="price" value={editingProduct.price} onChange={handleProductInputChange} className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none text-sm font-black text-gray-800" placeholder="0.00"/></div></div>
+                           <div className="space-y-1.5"><label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-1">Category</label><div className="relative"><Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} /><select name="category" value={editingProduct.category} onChange={handleProductInputChange} className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none text-sm font-black text-gray-800 appearance-none">{CATEGORIES.filter(c => c.id !== 'all').map(cat => (<option key={cat.id} value={cat.id}>{cat.name}</option>))}</select></div></div>
+                        </div>
+                     </div>
+
+                     <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100 space-y-5">
+                        <h4 className="text-[9px] font-black text-orange-500 uppercase tracking-[0.25em]">Culinart Details & Nutrients</h4>
+                        <div className="grid grid-cols-2 gap-4">
+                           <div className="space-y-1.5"><label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-1">Prep Time (Min)</label><div className="relative"><Clock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} /><input type="number" name="prepTime" value={editingProduct.prepTime} onChange={handleProductInputChange} className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none text-sm font-black text-gray-800" placeholder="15"/></div></div>
+                           <div className="space-y-1.5"><label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block px-1">Calories</label><div className="relative"><Flame className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300" size={16} /><input type="number" name="calories" value={editingProduct.calories} onChange={handleProductInputChange} className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white outline-none text-sm font-black text-gray-800" placeholder="0"/></div></div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-3">
+                           <div className="space-y-1"><label className="text-[8px] font-black text-gray-400 uppercase block text-center">Protein (g)</label><input type="number" name="nutrient_protein" value={editingProduct.nutrients?.protein || 0} onChange={handleProductInputChange} className="w-full px-3 py-2 bg-emerald-50 text-emerald-800 border-none rounded-xl text-center font-black text-xs"/></div>
+                           <div className="space-y-1"><label className="text-[8px] font-black text-gray-400 uppercase block text-center">Fat (g)</label><input type="number" name="nutrient_fat" value={editingProduct.nutrients?.fat || 0} onChange={handleProductInputChange} className="w-full px-3 py-2 bg-amber-50 text-amber-800 border-none rounded-xl text-center font-black text-xs"/></div>
+                           <div className="space-y-1"><label className="text-[8px] font-black text-gray-400 uppercase block text-center">Carbs (g)</label><input type="number" name="nutrient_carbs" value={editingProduct.nutrients?.carbs || 0} onChange={handleProductInputChange} className="w-full px-3 py-2 bg-blue-50 text-blue-800 border-none rounded-xl text-center font-black text-xs"/></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
             </div>
-            <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex justify-end gap-3"><button onClick={() => setIsProductModalOpen(false)} className="px-6 py-3 rounded-xl border border-gray-200 text-gray-600 font-bold hover:bg-white transition-all text-sm">Discard</button><button onClick={handleProductSave} className="px-8 py-3 rounded-xl bg-orange-500 text-white font-bold hover:bg-orange-600 transition-all text-sm shadow-lg flex items-center space-x-2"><Save size={18}/><span>Save Product</span></button></div>
+            <div className="p-8 border-t border-gray-100 bg-gray-50/80 flex justify-end gap-4"><button onClick={() => setIsProductModalOpen(false)} className="px-8 py-4 rounded-2xl border border-gray-200 text-gray-500 font-black uppercase text-[10px] tracking-widest hover:bg-white transition-all">Discard Registry</button><button onClick={handleProductSave} className="px-10 py-4 rounded-2xl bg-gray-900 text-white font-black uppercase text-[10px] tracking-[0.2em] hover:bg-orange-500 transition-all shadow-xl shadow-gray-200 flex items-center space-x-3"><Save size={18} className="text-orange-500"/><span>Save Culinary Asset</span></button></div>
           </div>
         </div>
       )}

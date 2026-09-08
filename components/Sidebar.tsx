@@ -2,7 +2,6 @@
 import React from 'react';
 import { 
   LayoutDashboard, 
-  ShoppingBag, 
   Store, 
   Utensils, 
   Truck, 
@@ -11,12 +10,13 @@ import {
   FileText, 
   Settings, 
   LogOut,
-  X
+  X,
+  Megaphone
 } from 'lucide-react';
 
 interface SidebarProps {
-  currentView: 'dashboard' | 'menu' | 'stores' | 'restaurants' | 'delivery' | 'settings' | 'customer';
-  onViewChange: (view: 'dashboard' | 'menu' | 'stores' | 'restaurants' | 'delivery' | 'settings' | 'customer') => void;
+  currentView: 'dashboard' | 'stores' | 'restaurants' | 'delivery' | 'settings' | 'customer' | 'ads';
+  onViewChange: (view: 'dashboard' | 'stores' | 'restaurants' | 'delivery' | 'settings' | 'customer' | 'ads') => void;
   onLogout: () => void;
   isOpen: boolean;
   onClose: () => void;
@@ -25,12 +25,12 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, onLogout, isOpen, onClose }) => {
   const menuItems = [
     { id: 'dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
-    { id: 'menu', icon: <ShoppingBag size={20} />, label: 'Menu' },
     { id: 'stores', icon: <Store size={20} />, label: 'Stores' },
     { id: 'restaurants', icon: <Utensils size={20} />, label: 'Restaurants' },
     { id: 'delivery', icon: <Truck size={20} />, label: 'Delivery' },
     { id: 'payments', icon: <CreditCard size={20} />, label: 'Payments' },
     { id: 'customer', icon: <Users size={20} />, label: 'Customer' },
+    { id: 'ads', icon: <Megaphone size={20} />, label: 'Ads Manager' },
     { id: 'invoice', icon: <FileText size={20} />, label: 'Invoice' },
   ];
 
@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, onLogout, 
             <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white font-black text-sm italic shadow-lg shadow-orange-200">
               M
             </div>
-            <span className="text-lg font-black text-gray-900 tracking-tight">Market<span className="text-orange-500">Cordi</span></span>
+            <span className="text-lg font-black text-gray-900 tracking-tight">Mossy<span className="text-orange-500"> Market</span></span>
           </div>
         </div>
 
@@ -85,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange, onLogout, 
             <button
               key={item.id}
               onClick={() => {
-                if (['dashboard', 'menu', 'stores', 'restaurants', 'delivery', 'customer', 'settings'].includes(item.id)) {
+                if (['dashboard', 'stores', 'restaurants', 'delivery', 'customer', 'settings', 'ads'].includes(item.id)) {
                   onViewChange(item.id as any);
                 }
               }}

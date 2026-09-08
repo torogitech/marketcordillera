@@ -8,6 +8,12 @@ export interface Product {
   brand?: string;
   calories?: number;
   ingredients?: string[];
+  prepTime?: number; // in minutes
+  nutrients?: {
+    protein?: number;
+    fat?: number;
+    carbs?: number;
+  };
 }
 
 export interface CartItem extends Product {
@@ -114,6 +120,24 @@ export interface Restaurant {
   fireSafetyPermit?: string;
   permitExpiry?: string;
   documents?: BusinessDocument[];
+}
+
+export type AdStatus = 'Active' | 'Scheduled' | 'Paused' | 'Ended';
+export type AdTarget = 'Restaurant' | 'Store';
+
+export interface Ad {
+  id: string;
+  title: string;
+  description: string;
+  targetType: AdTarget;
+  targetId: string;
+  image: string;
+  status: AdStatus;
+  reach: number;
+  clicks: number;
+  budget: number;
+  startDate: string;
+  endDate: string;
 }
 
 // Added missing types for Accommodation management

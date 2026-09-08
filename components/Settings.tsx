@@ -31,7 +31,7 @@ const Settings: React.FC = () => {
     email: 'saiful.uiux@gmail.com',
     phone: '+63 912 345 6789',
     role: 'Administrator',
-    bio: 'Lead System Architect for MarketCordillera Logistics. Managing regional restaurant and store data sync.',
+    bio: 'Lead System Architect for Mossy Market Logistics. Managing regional restaurant and store data sync.',
     language: 'English (Philippines)',
     timezone: '(GMT+08:00) Manila, Baguio',
     avatar: 'https://picsum.photos/seed/u1/150'
@@ -356,7 +356,7 @@ const Settings: React.FC = () => {
         <div className="divide-y divide-gray-100">
           {[
             { device: 'MacBook Pro 14"', browser: 'Admin Console • Baguio City Center', status: 'Primary Node', time: 'Active Now', ip: '112.198.64.12', icon: <Globe className="text-blue-500" /> },
-            { device: 'iPhone 15 Pro', browser: 'MarketCordi Mobile • La Trinidad', status: 'Mobile Terminal', time: '8 mins ago', ip: '112.198.65.4', icon: <Smartphone className="text-orange-500" /> },
+            { device: 'iPhone 15 Pro', browser: 'Mossy Market Mobile • La Trinidad', status: 'Mobile Terminal', time: '8 mins ago', ip: '112.198.65.4', icon: <Smartphone className="text-orange-500" /> },
             { device: 'iPad Pro M2', browser: 'Inventory App • Itogon Logistics', status: 'Field Device', time: '2 days ago', ip: '104.28.156.11', icon: <Smartphone className="text-purple-500" /> },
           ].map((session, i) => (
             <div key={i} className="p-8 flex items-center justify-between hover:bg-gray-50/50 transition-colors group">
